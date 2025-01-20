@@ -143,3 +143,102 @@ describe('Apre Sales Report API - Sales by Region', () => {
     });
   });
 });
+
+describe('APRE Sales Report API - Sales Data by salesPerson', () => {
+  it('should fetch a list of sales data by salesPerson', async () => {
+    mongo.mockImplementation(async (callback) => {
+      const db = {
+        collection: jest.fn().mockReturnValue({
+          find: jest.fn().mockReturnValue({
+            toArray: jest.fn().mockResolvedValue([
+              { id: 1, total: 100 }
+            ])
+          })
+        })
+      };
+      await callback(db);
+    });
+    const response = await request(app).get('/api/reports/sales/sales-data');
+
+    // asserts
+    expect(response.status).toBe(200);
+    expect(response.body).toBeDefined();
+    expect(response.body).toEqual([{ id: 1, total: 100 }]);
+  });
+
+  it('should return an empty array when there is no sales', async () => {
+    mongo.mockImplementation(async (callback) => {
+      const db = {
+        collection: jest.fn().mockReturnValue({
+          find: jest.fn().mockReturnValue({
+            toArray: jest.fn().mockResolvedValue([])
+          })
+        })
+      }
+      await callback(db)
+    });
+    const response = await request(app).get('/api/reports/sales/sales-by-salesperson');
+
+    // asserts
+    expect(response.status).toBe(200);
+    expect(response.body).toBeDefined();
+    expect(response.body).toEqual({});
+  });
+});
+
+// Sales Data By Sales Person API
+describe('APRE Sales Report API - Sales By Sales Person', () => {
+  it('should fetch a list of Sales By Sales Person', async() => {
+    mongo.mockImplementation(async (callback) => {
+      const db = {
+        collection: jest.fn().mockReturnValue({
+          find: jest.fn().mockReturnValue({
+            toArray: jest.fn().mockResolvedValue([
+              { id: salesperson, total: 100 }
+            ])
+          })
+        })
+      };
+         await callback(db);
+    });
+    const response = await request(app).get('/api/reports/sales/sales-by-salesperson');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toBeDefined();
+    expect(response.body).toEqual([{ id: salesperson, total: 100 }]);
+  });
+
+  // Empty array if there are no sales by a person
+  it('should return an empty array when there are no sales by a person', async () => {
+    mongo.mockImplementation(async (callback) => {
+      const db = {
+        collection: jest.fn().mockReturnValue({
+          find: jest.fn().mockReturnValue({
+            toArray: jest.fn().mockResolvedValue([]) 
+          })
+        })
+      }
+      await callback(db)
+    });
+    const response = await request(app).get('/api/reports/sales/sales-by-salesperson');
+   
+    // asserts
+    expect(response.status).toBe(200);
+    expect(response.body).toBeDefined();
+    expect(response.body).toEqual([]);
+  });
+
+  // Return 500 when there is an error with server
+  it('should return 500 when there is an error', async () => {
+   // Make a request to an invalid endpoint
+   const response = await request(app).get('/api/reports/sales/invalid-endpoint');
+
+    // asserts
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      message: 'Server Error',
+      status: 500,
+      type: 'error'
+    });
+  });
+});
