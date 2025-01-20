@@ -78,4 +78,17 @@ router.get('/regions/:region', (req, res, next) => {
   }
 });
 
+router.get('/sales-by-salesperson', (req, res, next) => {
+  try {
+    mongo (async db => {
+      const salesperson = await db.collection('sales').find().toArray();
+      res.send(salesperson);
+      console.log(salesperson);
+    }, next);
+  } catch (err) {
+    console.error('Error getting sales data: ', err)
+    next(err);
+  }
+});
+
 module.exports = router;
