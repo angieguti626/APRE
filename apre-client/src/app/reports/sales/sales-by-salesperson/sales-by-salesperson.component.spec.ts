@@ -20,4 +20,14 @@ describe('SalesBySalespersonComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+   // See the header displayed
+  it('should display header "Sales Data By Sales Person"', () => {
+    const compiled = fixture.nativeElement;
+    const titleElement = compiled.querySelector('h1');
+    
+    // asserts 
+    expect(titleElement).toBeTruthy();
+    expect(titleElement.textContent).toContain('Sales Data By Sales Person');
+  });  
 });
