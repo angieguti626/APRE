@@ -308,6 +308,8 @@ export class MainLayoutComponent {
     { name: 'Sales by Region', url: '/reports/sales/sales-by-region' },
     { name: 'Sales by Region - Tabular', url: '/reports/sales/sales-by-region-tabular' },
     // Add more reports as needed
+    // Link for Sales By Sales Person
+    { name: 'Sales by Sales Person', url: '/reports/sales/sales-by-salesperson' }
   ];
 
   agentPerformanceReports = [
