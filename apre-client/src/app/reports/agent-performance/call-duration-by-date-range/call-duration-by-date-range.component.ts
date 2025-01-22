@@ -15,10 +15,17 @@ import { environment } from '../../../../environments/environment';
       <h1>Call Duration By Date Range</h1>
       <div class="calendar-form">
         <div class="calendar-form__group">
+        
+          <!-- Add a placeholder to the start date label in CallDurationByDateRange Component-->
           <div class="calendar-form__item">
             <label class="calendar-form__label" for="startDate">Start Date:</label>
-            <app-calendar (dateSelected)="onStartDateSelected($event)"></app-calendar>
+            <!-- Need an input field for a placeholder -->
+            <div class ="date-picker">
+              <input type="text" class="input" placeholder = "Select Start Date">
+              <app-calendar (dateSelected)="onStartDateSelected($event)"></app-calendar>
+            </div>
           </div>
+          
           <div class="calendar-form__item">
             <label class="calendar-form__label" for="endDate">End Date:</label>
             <app-calendar (dateSelected)="onEndDateSelected($event)"></app-calendar>
