@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, Renderer2, ElementRef, ViewChild } from '@angular/core';
 import { CalendarComponent } from '../../../shared/calendar/calendar.component';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ChartComponent } from '../../../shared/chart/chart.component';
@@ -15,17 +15,11 @@ import { environment } from '../../../../environments/environment';
       <h1>Call Duration By Date Range</h1>
       <div class="calendar-form">
         <div class="calendar-form__group">
-        
-          <!-- Add a placeholder to the start date label in CallDurationByDateRange Component-->
           <div class="calendar-form__item">
             <label class="calendar-form__label" for="startDate">Start Date:</label>
-            <!-- Need an input field for a placeholder -->
-            <div class ="date-picker">
-              <input type="text" class="input" placeholder = "Select Start Date">
-              <app-calendar (dateSelected)="onStartDateSelected($event)"></app-calendar>
-            </div>
+            <!-- Add Placeholder to Start Label in CallDurationByDateRangeComponent -->
+            <app-calendar #startCalendar (dateSelected)="onStartDateSelected($event)"></app-calendar>
           </div>
-          
           <div class="calendar-form__item">
             <label class="calendar-form__label" for="endDate">End Date:</label>
             <app-calendar (dateSelected)="onEndDateSelected($event)"></app-calendar>
@@ -91,15 +85,29 @@ import { environment } from '../../../../environments/environment';
     }
   `
 })
-export class CallDurationByDateRangeComponent {
+export class CallDurationByDateRangeComponent implements AfterViewInit {
+  
+  // View Child from #startCalendar in HTML
+  @ViewChild("startCalendar", {read: ElementRef}) startCalendar!: ElementRef;
+  
   startDate: Date | null = null;
   endDate: Date | null = null;
   callDurationData: number[] = []; // Initially empty
   agents: string[] = []; // Initially empty
   showChart: boolean = false; // Initially hidden
 
-  constructor(private http: HttpClient) {
-
+  // Placeholder for Start Label using AfterViewInit
+  constructor(private http: HttpClient, private renderer: Renderer2) {}
+  ngAfterViewInit(): void {
+    this.setPlaceholder(this.startCalendar, 'Select Start Date');
+  }
+  
+  // Setting Placeholder as inputElement
+  setPlaceholder(calendar: ElementRef, placeholder: string){
+    const inputElement = calendar.nativeElement.querySelector('input');
+    if (inputElement){
+      this.renderer.setAttribute(inputElement, 'placeholder', placeholder);
+    }
   }
 
   onStartDateSelected(date: Date) {
