@@ -19,7 +19,8 @@ import { ConfirmDialogComponent } from "../../../shared/confirm-dialog/confirm-d
       }
       <table class="table">
         <thead>
-          <th>Username</th>
+          <!-- Add the required field indicator to the "User's table, username field." -->
+          <th>Username<span class="required">*</span></th>
           <th>Email</th>
           <th>Role</th>
           <th>Functions</th>
